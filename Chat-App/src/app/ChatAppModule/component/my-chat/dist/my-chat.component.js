@@ -289,8 +289,8 @@ var MyChatComponent = /** @class */ (function () {
                     });
                 }, 2000);
             }
-            // phần dành cho active windows
-            if (chatgroup.toString() !== datanotifi[0].IdGroup.toString() && this.userCurrent !== datanotifi[0].UserName) {
+            //  begi phần dành cho active windows
+            if (!active && chatgroup.toString() == datanotifi[0].IdGroup.toString() && this.userCurrent !== datanotifi[0].UserName) {
                 var sb_2 = this.chatService.UpdateUnReadGroup(datanotifi[0].IdGroup, this.userCurrent, "unread").subscribe(function (res) {
                     if (res.status === 1) {
                         var sbs_2 = _this.chatService.GetUnreadMessInGroup(datanotifi[0].IdGroup, _this.UserId).subscribe(function (res) {
@@ -372,6 +372,7 @@ var MyChatComponent = /** @class */ (function () {
                 });
                 this._subscriptions.push(sb_2);
             }
+            // end phần dành cho active windows
         }
         else {
             // cần check ở chỗ này
@@ -470,7 +471,62 @@ var MyChatComponent = /** @class */ (function () {
                     });
                 }
             }
+            // begin phần dành cho active windows
+            if (!active && chatgroup.toString() == datanotifi[0].IdGroup.toString()) {
+                if (index >= 0 && this.userCurrent !== datanotifi[0].UserName) {
+                    this.chatService.UpdateUnRead(datanotifi[0].IdGroup, this.UserId, "unread").subscribe(function (res) {
+                        if (res.status === 1) {
+                            _this.chatService.GetUnreadMess(datanotifi[0].IdGroup).subscribe(function (res) {
+                                if (_this.lstContact[index].UnreadMess == null || _this.lstContact[index].UnreadMess == 0) {
+                                    _this.dem += 1;
+                                    _this.electron_services.setBadgeWindow(_this.dem);
+                                    // this.titleService.setTitle('('+this.dem+')'+" JeeChat");
+                                }
+                                if (_this.lstContact[index].UnreadMess < res.data[0].slunread) {
+                                    // this.soundsevices.playAudioMessage();
+                                    var data = _this.auth.getAuthFromLocalStorage();
+                                    if (datanotifi[0].Attachment.length > 0 || datanotifi[0].Attachment_File.length > 0) {
+                                        _this.contentnotfy = "Gửi một file đính kèm";
+                                    }
+                                    else {
+                                        _this.contentnotfy = datanotifi[0].Content_mess.replace(/<[^>]+>/g, '');
+                                    }
+                                    _this.chatService.publishMessNotifi(data.access_token, datanotifi[0].IdGroup, _this.contentnotfy, datanotifi[0].InfoUser[0].Fullname, datanotifi[0].InfoUser[0].Avatar).subscribe(function (res) {
+                                    });
+                                }
+                                var customevent = new CustomEvent("newMessage", {
+                                    detail: {
+                                        UserId: datanotifi[0].InfoUser[0].ID_user,
+                                        username: datanotifi[0].InfoUser[0].Username,
+                                        IdGroup: datanotifi[0].IdGroup,
+                                        isGroup: false,
+                                        title: datanotifi[0].InfoUser[0].Fullname,
+                                        avatar: datanotifi[0].InfoUser[0].Avatar,
+                                        message: _this.contentnotfy,
+                                        myservice: _this.chatService //passing SettingsService reference
+                                    },
+                                    bubbles: true,
+                                    cancelable: true
+                                });
+                                event.target.dispatchEvent(customevent); //dispatch custom event
+                                console.log("this.CheckActiveNotify(datanotifi[0].IdGroup)", _this.CheckActiveNotify(datanotifi[0].IdGroup));
+                                if (_this.CheckActiveNotify(datanotifi[0].IdGroup)) {
+                                    desktop_notify(customevent);
+                                    _this.electron_services.setProgressBarWindows();
+                                }
+                                // sẽ đưa lên đầu tiên và + thêm số lượng
+                                _this.lstContact[0].UnreadMess = res.data[0].slunread;
+                                _this.changeDetectorRefs.detectChanges();
+                            });
+                        }
+                        else {
+                            return;
+                        }
+                    });
+                }
+            }
         }
+        // end phần dành cho active windows
     };
     MyChatComponent.prototype.UpdateUnreadMess = function (IdGroup, UserId, count) {
         if (this.searchText) {

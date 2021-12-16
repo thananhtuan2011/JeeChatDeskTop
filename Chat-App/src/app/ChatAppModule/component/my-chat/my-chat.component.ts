@@ -371,8 +371,9 @@ let userpusnotify=[];
        })
       }, 2000);
     }
-// phần dành cho active windows
-if(chatgroup.toString()!==datanotifi[0].IdGroup.toString()&&this.userCurrent!==datanotifi[0].UserName)
+//  begi phần dành cho active windows
+
+if(!active&&chatgroup.toString()==datanotifi[0].IdGroup.toString()&&this.userCurrent!==datanotifi[0].UserName)
 {
 const sb= this.chatService.UpdateUnReadGroup(datanotifi[0].IdGroup,this.userCurrent,"unread").subscribe(res=>{
 
@@ -488,6 +489,7 @@ this.changeDetectorRefs.detectChanges();
 })
     this._subscriptions.push(sb);
  }
+ // end phần dành cho active windows
 }
  else
  {
@@ -620,8 +622,85 @@ this.changeDetectorRefs.detectChanges();
         
         }
       }
+// begin phần dành cho active windows
+      if(!active&&chatgroup.toString()==datanotifi[0].IdGroup.toString())
+      {
+  
+  
+          if(index>=0&&this.userCurrent!==datanotifi[0].UserName)
+          {
+            this.chatService.UpdateUnRead(datanotifi[0].IdGroup,this.UserId,"unread").subscribe(res=>{
+  
+              if(res.status===1)
+              {
+  
+                this.chatService.GetUnreadMess(datanotifi[0].IdGroup).subscribe(res=>{
+                  if( this.lstContact[index].UnreadMess==null|| this.lstContact[index].UnreadMess==0)
+                  {
+                   
+                    this.dem+=1;
+                    this.electron_services.setBadgeWindow(this.dem)
+                    // this.titleService.setTitle('('+this.dem+')'+" JeeChat");
+                  }
+                  if(  this.lstContact[index].UnreadMess<res.data[0].slunread)
+                  {
+                    // this.soundsevices.playAudioMessage();
+                    const data=this.auth.getAuthFromLocalStorage();
+                    if(datanotifi[0].Attachment.length>0||datanotifi[0].Attachment_File.length>0)
+                    {
+                      this.contentnotfy="Gửi một file đính kèm";
+                    }
+                    else{
+                       this.contentnotfy=datanotifi[0].Content_mess.replace(/<[^>]+>/g,'');
+  
+                    }
+  
+                    this.chatService.publishMessNotifi(data.access_token,datanotifi[0].IdGroup, this.contentnotfy,datanotifi[0].InfoUser[0].Fullname,datanotifi[0].InfoUser[0].Avatar).subscribe(res=>{
+  
+                  });
+                
+                  }
+                  var customevent = new CustomEvent(
+                    "newMessage", 
+                    {
+                        detail: {
+                          UserId:datanotifi[0].InfoUser[0].ID_user,
+                          username:datanotifi[0].InfoUser[0].Username,
+                          IdGroup:datanotifi[0].IdGroup,
+                          isGroup:false,
+                          title:datanotifi[0].InfoUser[0].Fullname,
+                          avatar:datanotifi[0].InfoUser[0].Avatar,
+                          message:this.contentnotfy,
+                          myservice: this.chatService //passing SettingsService reference
+                        },
+                        bubbles: true,
+                        cancelable: true
+                      }
+                    );
+                  
+                    event.target.dispatchEvent(customevent); //dispatch custom event
+                  console.log("this.CheckActiveNotify(datanotifi[0].IdGroup)",this.CheckActiveNotify(datanotifi[0].IdGroup))
+                  if(this.CheckActiveNotify(datanotifi[0].IdGroup))
+                  {
+                    desktop_notify(customevent)
+                    this.electron_services.setProgressBarWindows();
+                  }
+                  // sẽ đưa lên đầu tiên và + thêm số lượng
+                  this.lstContact[0].UnreadMess=res.data[0].slunread;
+                  this.changeDetectorRefs.detectChanges();
+                })
+              }
+              else
+              {
+                return;
+              }
+            })
+          }
+         
+  
+        }
       }
-
+      // end phần dành cho active windows
       }
 
   UpdateUnreadMess(IdGroup:number,UserId:number,count:number)
