@@ -1,0 +1,124 @@
+<div id="{{user.user.IdGroup}}" class="card chat-box">
+    <div *ngIf="!user.user.isGroup" class="card-header">
+        <div class="d-flex" *ngFor="let item of user.user.InfoGroupUser">
+            <div class="mr">
+                <img *ngIf="item.Avatar==''" src="./assets/user.png" alt="" class="rounded-circle img-person">
+                <img src="{{item.Avatar}}" alt="" class="rounded-circle img-person">
+            </div>
+            <div>
+             
+                <span *ngIf="item.Fullname.lenght>0;then show1;else show2">
+
+                </span>
+                <ng-template #show1>
+                    <a   href="/" class="text-primary" style="text-decoration: none;">{{item.Fullname}}
+                  
+                    </a>
+                </ng-template>
+                <ng-template #show2>
+                    <a  href="/" class="text-primary" style="text-decoration: none;">{{item.Fullname| slice:0:15 }}
+                  
+                    </a>
+                </ng-template>
+               
+                <!-- <div class="text-muted">{{user.lastActive}}</div> -->
+               <div *ngIf="user.user.Active" class="text-muted">Online</div> 
+               <div *ngIf="!user.user.Active" class="text-muted">Offline</div> 
+            </div>
+            <div class="child-right" >
+                <a class="mr btn" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseChatBox">
+                    <mat-icon>remove</mat-icon>
+                    </a>
+                <a class="mr" href="javascript:;" (click)="closeBoxChat()">
+                    
+                    <mat-icon>clear</mat-icon>
+                </a>
+            </div>
+        </div>
+
+      
+    </div>
+
+    <div *ngIf="user.user.isGroup" class="card-header">
+        <div class="d-flex">
+            <div class="mr"><img src="./assets/user.png" alt="" class="rounded-circle img-person"></div>
+            <div style=" display: flex;
+            align-items: center;">
+              
+                <span *ngIf="user.user.GroupName.lenght>0;then show1;else show2">
+
+                </span>
+                <ng-template #show1>
+                    <a  href="/" class="text-primary" style="text-decoration: none;">{{user.user.GroupName}}
+                  
+                    </a>
+                </ng-template>
+                <ng-template #show2>
+                    <a   href="/" class="text-primary" style="text-decoration: none;
+                       ">{{user.user.GroupName| slice:0:15 }}
+                  
+                    </a>
+                </ng-template>
+               
+                <!-- <div class="text-muted">{{user.lastActive}}</div> -->
+            </div>
+            <div class="child-right" >
+                <a class="mr btn" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="collapseChatBox">
+                    <mat-icon>remove</mat-icon>
+                    </a>
+                <a class="mr" href="javascript:;" (click)="closeBoxChat()">
+                    
+                    <mat-icon>clear</mat-icon>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div [collapse]="isCollapsed" [isAnimated]="true" id="collapseChatBox">
+      
+        <div class="card-body"  #scrollMeChat >
+            <cdk-virtual-scroll-viewport (scroll)="scrollHandler($event,user.user.IdGroup)"  itemSize="15"  style="height: 350px;" ngx-auto-scroll lock-y-offset="10" observe-attributes  >
+
+        
+            <ul class="chat chat-frame">
+                <a href="javascript:;" *ngIf="(messageService.messageThread$ | async)?.length==100">Xem thêm tin nhắn</a>
+                <li class="pd-5" *cdkVirtualFor="let message of (messageService.messageThread$ | async)">                
+                    <div [ngClass]=" message.UserName !==userCurrent ? 'd-flex' : 'parent-sent' ">
+                        <div class="mr" *ngIf="message.UserName !== userCurrent">
+                            <div *ngFor="let info of  message.InfoUser">
+                                <img *ngIf="info.Avatar==''" class="rounded-circle small-img" src="{{'./assets/user.png'}}" alt="">
+                                <img class="rounded-circle small-img" src="{{info.Avatar}}" alt="">
+                            </div>
+                        </div>
+                        
+                        <div  class="message-body" [class.message-send]="message.UserName === userCurrent">   
+                            <div>{{message.Content_mess}}</div>
+                            <!-- (list$ | async)?.length==0 -->
+                         
+                        </div>
+
+                      
+                  
+                        <div *ngIf="(messageService.seenMessage$ | async) === user.username">
+                            <img class="rounded-circle" src="{{user.photoUrl || './assets/user.png'}}" alt="{{user.Username}}" style="max-height: 10px;">
+                        </div>              
+                    </div>
+                </li>
+            </ul>
+        </cdk-virtual-scroll-viewport>
+        </div>
+        <div class="card-footer">
+            <form #messageForm="ngForm" (ngSubmit)="sendMessage()" autocomplete="off">
+                <div class="input-group">
+                    <input type="text" name="messageContent" required   [(ngModel)]="messageContent"
+                        class="form-control input-sm" placeholder="Send a private message"
+                        (focus)="onFocusEvent($event)"
+                        >
+                    <div class="input-group-append">
+                        <button [disabled]="" class="btn btn-primary" type="submit">Send</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+</div>

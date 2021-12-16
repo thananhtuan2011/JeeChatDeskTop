@@ -1,0 +1,101 @@
+.jee {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #ffffff;
+  background-clip: border-box;
+  border: 1px solid #EBEDF3;
+  border-radius: 0.42rem;
+}
+
+.jee-custom {
+  box-shadow: 0px 0px 30px 0px rgba(82, 63, 105, 0.05);
+  border: 0;
+}
+
+.jee-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  flex-wrap: wrap;
+  min-height: 65px;
+  background-color: transparent;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0;
+  background-color: #ffffff;
+  border-bottom: 1px solid #EBEDF3;
+}
+
+.jee-toolbar {
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0;
+  flex-wrap: wrap;
+}
+
+.jee-title {
+  margin: 0 0.75rem 0 0;
+  flex-wrap: wrap;
+  text-transform: uppercase;
+  font-family: "Roboto, Verdana, Arial, Helvetica, sans-serif" !important;
+  text-transform: uppercase;
+  font-size: 14px !important;
+  color: #000000 !important;
+}
+
+.jee-body {
+  flex: 1 1 auto;
+  min-height: 1px;
+  padding: 1rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
+.jee-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.list.home-links .li:hover {
+  background-color: #E4E6E9;
+  color: #65676B;
+  font-weight: bold;
+}
+
+.list.home-links .li {
+  outline: none;
+  padding: 11px 16px 11px 0;
+  position: relative;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.list.home-links .li.focus {
+  background-color: #E4E6E9;
+  color: #65676B;
+  font-weight: bold;
+}
+
+.mat-standard-chip.mat-chip-with-trailing-icon {
+  padding-left: 0px;
+}
+
+.content {
+  position: absolute;
+  top: 0px;
+}
+
+:host > > > .mat-dialog-container {
+  padding: 1px !important;
+}

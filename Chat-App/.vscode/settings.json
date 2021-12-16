@@ -1,0 +1,4 @@
+{
+    "angular.enable-strict-mode-prompt": false,
+    "compile-hero.disable-compile-files-on-did-save-code": false
+}

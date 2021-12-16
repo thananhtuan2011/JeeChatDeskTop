@@ -1,0 +1,28 @@
+<div class="row">
+   
+    <div class="avatar" style="width:auto">
+        <ngx-avatar [size]="size"
+            matTooltip="{{name}}"
+            src="{{image}}"
+            *ngIf="image;else bindText">
+        </ngx-avatar>
+        <ng-template #bindText>
+            <ngx-avatar textSizeRatio="2.5"
+                matTooltip="{{name}}"
+                [size]="size"
+                [name]="jeerequestservice.getNameUser(name)"
+                bgColor="{{jeerequestservice.getColorNameUser(name)}}">
+            </ngx-avatar>
+        </ng-template>
+    </div>
+    <ng-container *ngIf="showFull">
+        <div style="margin-left: 10px;">
+            <div class="name" [ngStyle]="{'color': textcolor}">
+                <span class="url">{{name}}</span>
+            </div>
+            <div class="info">
+                <span > {{info}} </span>
+            </div>
+        </div>
+    </ng-container>
+</div>

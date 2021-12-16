@@ -1,0 +1,66 @@
+<style>
+  .body
+  {
+    height: 100vh;
+  }
+
+  @media screen and (max-width: 1200px) and (min-width: 1000px){
+    .body
+  {
+    /* padding-left:31%;  */
+    height: 100vh;
+  }
+
+  }
+
+  @media screen and (max-width: 1000px) and (min-width: 700px){
+    .body
+  {
+    /* padding-left:40%;  */
+    height: 100vh;
+  }
+
+  }
+  h3{
+    color: #007DFA;
+  }
+  .txt
+  {
+    color: black;
+  }
+</style>
+<div  class="body"
+ >
+
+    <ngb-carousel style="height: 100%;">
+      <ng-template ngbSlide>
+        <div class="wrapper">
+
+          <img src="./assets/slide3.gif" alt="Random first slide">
+        </div>
+        <div class="carousel-caption">
+          <h3>Chào mừng bạn đến với jeeChat</h3>
+          <p class="txt">Giải quyết công việc một cách hiệu quả...</p>
+        </div>
+
+      </ng-template>
+      <ng-template ngbSlide>
+        <div class="wrapper">
+          <img src="./assets/slide2.gif" alt="Random second slide">
+        </div>
+        <div class="carousel-caption">
+          <h3>Chia sẻ thông tin một cách nhanh chóng và tiện lợi</h3>
+
+        </div>
+      </ng-template>
+      <ng-template ngbSlide>
+        <div class="wrapper">
+          <img src="./assets/slide1.gif" alt="Random third slide">
+        </div>
+        <div class="carousel-caption">
+          <h3 >Chat nhóm với đồng nghiệp</h3>
+
+        </div>
+      </ng-template>
+    </ngb-carousel>
+    </div>

@@ -1,0 +1,77 @@
+<div>
+    <ng-container *ngIf="user$ as _user">
+     
+        <!--end::Header-->
+  
+        <!--begin::Content-->
+        <div class="offcanvas-content pr-5 mr-n5">
+            <!--begin::Header-->
+            <div class="d-flex align-items-center mt-5">
+                <div class="symbol symbol-100 mr-5">
+                    <ngx-avatar [size]="80" src="{{_user.user.customData.personalInfo.Avatar}}" *ngIf="_user.user.customData.personalInfo.Avatar;else bindText">
+                    </ngx-avatar>
+                    <ng-template #bindText>
+                        <ngx-avatar textSizeRatio="2.5" matTooltip="{{_user.user.customData.personalInfo.Fullname}}" [size]="80" [name]="_user.user.customData.personalInfo.Name.slice(0,1)" bgColor="{{_user.user.customData.personalInfo.BgColor}}">
+                        </ngx-avatar>
+                    </ng-template>
+                </div>
+                <div class="d-flex flex-column" style="line-height: 2;">
+                    <!-- <a href="#" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">
+            {{ _user.user.customData.personalInfo.Fullname }}
+          </a> -->
+                    <div class="hoten">
+                        {{ _user.user.customData.personalInfo.Fullname }}
+                    </div>
+                    <div class="chucvu">
+                        {{ _user.user.customData.personalInfo.Jobtitle }}
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex align-items-center mt-5" style="justify-content: flex-end;">
+                <div class="symbol symbol-100 mr-5">
+  
+                </div>
+                <div class="d-flex flex-column" style="    padding-right: 20px;">
+                    <div class="navi mt-2" style="padding-bottom: 1.5rem;">
+                        <a class="btn btn-sm quanlytaikhoan py-2 cursor-pointer" (click)="quanlytaikhoan()">{{'profile.quanlytaikhoan'
+              | translate}}
+            </a>
+                        <a class="btn btn-sm dangxuat py-2  cursor-pointer" (click)="logout()">{{'profile.dangxuat' |
+              translate}}</a>
+                    </div>
+                </div>
+            </div>
+            <!--end::Header-->
+  
+            <!--begin::Separator-->
+            <!-- <div class="separator separator-dashed mt-8 mb-5"></div> -->
+            <div style="border: 1px solid #D1D1D1;"></div>
+            <!--end::Separator-->
+  
+            <!--begin::Header-->
+            <div class="offcanvas-header d-flex align-items-center justify-content-between pb-3">
+                <span class="nhacnho" translate="profile.nhacnho"></span>
+            </div>
+            <div class="row link" *ngFor="let app of listNhacNho" (click)="ChangeLink(app)">
+              <div class="col-md-9 kt--margin-bottom-10-mobile">
+                <span class="svg-icon menu-icon" style="padding: 0 10px;">
+                  <i *ngIf="app.WebAppIcon" class="kt-menu__link-icon" [ngClass]="app.WebAppIcon"></i>
+                </span>
+                <span class="nhacnho-text">{{app.LoaiNhacNho}}</span>
+              </div>
+              <div class="col-md-3 kt--margin-bottom-10-mobile" style="text-align: start;">
+                <span class="soluong">{{app.Soluong}}</span>
+                <span class="svg-icon menu-icon" style="padding: 0 10px;">
+                  <i class="ki ki-bold-arrow-next icon-xs" style="color:#050505; margin-left: 20px;" *ngIf="app.WebAppLink"></i>
+                </span>
+              </div>
+            </div>
+          
+            <div>
+              
+            </div>
+            <!--end::Notifications-->
+        </div>
+        <!--end::Content-->
+    </ng-container>
+</div>

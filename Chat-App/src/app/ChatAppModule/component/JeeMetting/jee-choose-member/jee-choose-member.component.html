@@ -1,0 +1,64 @@
+<div class="jee jee-custom">
+    <div class="jee-header">
+        <div class="row" style="width: 100%;">
+            <h5>Thêm thành viên</h5>
+        </div>
+    </div>
+    <div class="jee-body">
+        <div class="row" style="max-height:25vh; overflow: auto;">
+            <mat-form-field style="border-radius: 10px;
+            border: 1px solid lightgray; width: 100%; padding: 0 10px 0 10px;">
+                <mat-chip-list #chipList>
+                    <mat-chip *ngFor="let dlht of user_tam" [selectable]="selectable" [removable]="removable" (removed)="remove(dlht)">
+                        <span *ngIf="dlht.Image===''||dlht.Image===null;then e1; else e2"></span>
+                        <ng-template #e2>
+                            <ngx-avatar size="30" src="{{dlht.Image}}"></ngx-avatar>
+                        </ng-template>
+
+                        <ng-template #e1>
+                            <ngx-avatar size="30" [name]="getNameUser(dlht.HoTen)" bgColor="{{getColorNameUser(dlht.HoTen)}}">
+                            </ngx-avatar>
+                        </ng-template>
+                        <span style="padding-left: 5px;">{{dlht.HoTen}}</span>
+                        <mat-icon matChipRemove *ngIf="removable">cancel
+                        </mat-icon>
+                    </mat-chip>
+                    <input [formControl]="userControl" [matChipInputFor]="chipList" id="search" placeholder="Mời thành viên" (keydown)="keyArrowInput($event, cellindex);" [matChipInputSeparatorKeyCodes]="separatorKeysCodes">
+                </mat-chip-list>
+            </mat-form-field>
+        </div>
+
+        <div style="height:53vh; overflow-y: auto;" #scrollMe>
+            <div *ngFor="let item of listUser | async;let vi=index">
+                <div class="kt-notification__item-details list home-links" style="display: flex;align-items: center;">
+                    <div (click)="addTagName(item)" class="li" style="border-radius: 5px; width: 100%;" id="row{{vi}}">
+                        <div class="col-md-1">
+                            <span *ngIf="item.Image===''||item.Image===null;then e1; else e2"></span>
+                            <ng-template #e2>
+                                <ngx-avatar size="30" src="{{item.Image}}"></ngx-avatar>
+                            </ng-template>
+
+                            <ng-template #e1>
+                                <ngx-avatar size="30" [name]="getNameUser(item.HoTen)" bgColor="{{getColorNameUser(item.HoTen)}}">
+                                </ngx-avatar>
+                            </ng-template>
+                        </div>
+                        <div class="col-md-11">
+                            <span style="font-weight: bold; padding-left: 7px;" class="kt-notification__item-title">
+                                {{item.HoTen}}
+                            </span><br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="jee-footer">
+        <button type="button" class="mat-raised-button ja_button ja_btn-goback" (click)="goBack()">
+            Hủy
+        </button>&nbsp;
+        <button type="button" class="mat-raised-button mat-button-base mat-primary" (click)="onSubmit()">
+            Xác nhận
+        </button>
+    </div>
+</div>

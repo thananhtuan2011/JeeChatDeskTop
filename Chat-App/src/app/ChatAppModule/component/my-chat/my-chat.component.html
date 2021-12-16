@@ -1,0 +1,438 @@
+
+
+  <style>
+    .my-avatar
+    {
+      padding-right: 8px;
+    }
+    .lastmess{
+      padding-top: 30px !important;
+      padding-left: 60px;
+      color: #ABABAB;
+      font-size: 13px;
+      display: flex;
+      margin-top: -10px !important;
+      width: 100% !important;
+      background: none !important;
+      border: none !important;
+    }
+    .titile
+  {
+    font-size: 20px;
+  font-weight: bold;
+  }
+    .text
+    {
+      text-align: center;
+      padding-top: 10px;
+    }
+    .cover
+    {
+      border-radius: 50%;
+    width: 20px !important;
+    height: 20px !important;
+    display: flex;
+    justify-content: center;
+    }
+
+    .contentlassmes
+    {
+      /* padding-top: 6px; */
+      margin-left: 5px;
+
+    }
+
+  </style>
+
+<div style="display: flex;">
+
+
+<mat-tab-group style="height: 100vh;" [@.disabled]="true" [selectedIndex]="1" >
+  <!-- begin tab logout -->
+  <mat-tab  >
+		<ng-template mat-tab-label >
+      <div>
+
+
+      <button mat-button >
+        <ngx-avatar  *ngIf="Avatar"  class="onlineuser" [size]="50" src="{{Avatar}}">
+        </ngx-avatar>
+        <ngx-avatar   class="onlineuser" [size]="50" [name]="name.slice(0, 1)" bgColor="{{BgColor}}" *ngIf="!Avatar"></ngx-avatar>
+
+      </button>
+
+
+
+<!-- <mat-menu #menu="matMenu" >
+<button (click)="logout()" mat-menu-item>
+<mat-icon>keyboard_return</mat-icon>
+<span>Đăng xuất</span>
+</button>
+
+<button (click)="quanlytaikhoan()" mat-menu-item>
+  <mat-icon> person_pin</mat-icon>
+  <span>Quản lý tài khoản</span>
+  </button>
+</mat-menu> -->
+</div>
+		</ng-template>
+    <ng-template matTabContent>
+
+
+    <div id="frame" style="border: 1px solid #E1E4EA;">
+      <div id="sidepanel">
+
+
+        <div>
+
+           <app-user-profile></app-user-profile>
+
+
+        </div>
+
+      </div>
+      <!-- <router-outlet></router-outlet> -->
+    </div>
+  </ng-template>
+	</mat-tab>
+<!-- end tab logout -->
+
+<!-- begin tab chat -->
+	<mat-tab >
+		<ng-template mat-tab-label>
+      <i *ngIf="dem>0" matBadge="{{dem}}" matBadgeColor="warn" style="color: white; font-size: 25px;" class="fa fa-weixin" aria-hidden="true"></i>
+      <i *ngIf="dem==0" style="color: white; font-size: 25px;" class="fa fa-weixin" aria-hidden="true"></i>
+		</ng-template>
+		<ng-template matTabContent>
+      <div id="frame" style="border: 1px solid #E1E4EA;">
+        <div id="sidepanel">
+          <div id="profile">
+            <div class="wrap">
+              <div style=" display: flex;align-items: center; padding: 15px;flex-direction: column;" >
+
+
+                <div style="display: flex;">
+                  <span style="    font-size: 15px;">
+                    Xin chào:
+                  </span>
+                  <p style="margin: 0;font-weight: bold;"> {{name}}</p>
+
+                </div>
+
+
+                <div style="display: flex; align-items: center; flex-direction: row-reverse;padding-top: 5px;">
+
+                  <button   matTooltip="Tạo Nhóm Chat" style="padding: 5px;" (click)="CreaterGroupChat()" style="margin-top: -7px;" mat-icon-button aria-label="Example icon-button with a heart icon">
+                    <i style="font-size: 20px;" class="fa fa-address-card-o" aria-hidden="true"></i>
+                  </button>
+
+                  <button  matTooltip="Chat Với" style="padding: 5px;" (click)="CreaterUserChat()" style="margin-top: -7px;" mat-icon-button aria-label="Example icon-button with a heart icon">
+                    <i style="font-size: 20px;" class="fa fa-address-book-o" aria-hidden="true"></i>
+
+                  </button>
+
+            </div>
+              </div>
+
+
+
+
+            </div>
+          </div>
+          <div id="search">
+
+            <label for=""><mat-icon>search</mat-icon></label>
+            <input  name="search" [(ngModel)]="searchText" type="text" placeholder="Tìm kiếm" />
+
+          </div>
+          <div>
+
+
+            <select #sel (change)="changed(sel.value)" style="    border: none;
+            outline: none;     margin-bottom: 15px;font-size: 13px;cursor: pointer;" >
+              <option value="1">Tất cả tin nhắn</option>
+              <option value="2">Tin nhắn chưa đọc</option>
+              <option value="3">Tin nhắn đã đọc</option>
+            </select>
+              <span (click)="AllRead()" class="allread">Đánh dấu đã đọc</span>
+          </div>
+          <div id="contacts" >
+
+            <div *ngIf="active" style="display: flex;justify-content: center;align-items: center;">
+
+              <span  class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+
+
+              </span>
+              <p style="padding-left: 5px;">Loading...</p>
+            </div>
+
+            <div #scrollMeChat   style="outline: none;"  *ngFor="let item of lstContact | filter: searchText; let i = index">
+
+
+            <ul *ngIf="!item.isGroup" >
+              <li  (click)="UpdateUnreadMess(item.IdGroup,item.UserId,item.UnreadMess,item.isGroup)"  routerLinkActive="menu-item-active" [routerLink]="['/Chat/Messages',item.IdGroup,null]"  class="contact" *ngFor="let user of  item.InfoGroupUser">
+                <div class="wrap">
+                  <span *ngIf="item.Active" class="contact-status online"></span>
+                  <ngx-avatar [size]="45" src="{{ user.Avatar }}" *ngIf="user.Avatar"></ngx-avatar>
+                  <ngx-avatar [size]="45" [name]="user.Fullname.slice(0, 1)" bgColor="{{ user.BgColor }}" *ngIf="!user.Avatar"></ngx-avatar>
+
+
+                    <p style="    padding-left: 12px;" class="name">{{user.Fullname}}
+
+                    </p>
+
+                    <span style=" position: absolute;
+                    left: 0;
+                    margin: -2px 0 0 -2px;" [ngClass]="getClass(item.UnreadMess)"   *ngFor="let lastmess of item.LastMess">
+
+
+                        <p  style="margin-right: 10px;" *ngIf="lastmess.UserName===userCurrent">Bạn:</p>
+
+                        <!-- <p *ngIf="lastmess.UserName!=userCurrent&&lastmess.InfoUser.length>0">{{lastmess.InfoUser[0].Fullname}}:</p> -->
+                        <p  *ngIf="lastmess.isFile">Đính kèm 1 file</p>
+
+
+                    <p class="textlast"   *ngIf="lastmess.Content_mess&&lastmess.Content_mess.length>30&&!lastmess.isFile&&!lastmess.isHiden"  [innerHTML]="lastmess.Content_mess">
+
+
+                    </p>
+                    <p  *ngIf="lastmess.Content_mess&&lastmess.isHiden&&!lastmess.isFile" > Tin nhắn đã thu hồi</p>
+                    <label *ngIf="lastmess.Content_mess.length>30">...</label>
+                    <p  *ngIf="lastmess.Content_mess&&lastmess.Content_mess.length<=30&&!lastmess.isFile&&!lastmess.isHiden" [innerHTML]="lastmess.Content_mess"> </p>
+
+                  </span>
+                  <!-- </div> -->
+
+                </div>
+               <div  style="    align-items: flex-end;
+               display: flex;
+               flex-direction: column;">
+
+
+
+                <div *ngIf="item.LastMess.length>0" >
+                  <p style="text-align: center;
+                  width: 43px;
+                  font-size: 12px;
+                  margin-bottom: 0;
+                  float: right;">{{item.LastMess[0].CreatedDate | date : 'yyyy/M/dd h:mm'| timelast}}</p>
+                </div>
+                <ngx-avatar *ngIf="item.UnreadMess>0" class="my-avatar" [size]="22" value="{{item.UnreadMess}}" bgColor="#f52f2f" ></ngx-avatar>
+              </div>
+              </li>
+
+
+            </ul>
+
+            <ul *ngIf="item.isGroup" >
+              <li (click)="UpdateUnreadMessGroup(item.IdGroup,item.Username,item.UnreadMess)" routerLinkActive="menu-item-active" style="outline: none;" [routerLink]="['/Chat/Messages',item.IdGroup,null]" class="contact" *ngFor="let user of  item.InfoGroupUser">
+                <div class="wrap">
+                  <span *ngIf="item.Active" class="contact-status online"></span>
+
+                  <div class="avatar-group">
+                    <div *ngFor="let mb of item.ListMember | slice:0:4;let i=index">
+
+                    <div *ngFor="let it of mb.InfoMemberUser ">
+                      <div  *ngIf="i>=0&&i<3" >
+                        <ngx-avatar [size]="25" [name]="it.Fullname.slice(0, 1)" bgColor="{{ it.BgColor }}" *ngIf="!it.Avatar"></ngx-avatar>
+                        <ngx-avatar [size]="25" src="{{ it.Avatar }}" *ngIf="it.Avatar"></ngx-avatar>
+
+                      </div>
+                      <ngx-avatar *ngIf="i==3&&item.ListMember.length>=4" [size]="25" value="{{item.ListMember.length-3}}" bgColor="#ad3838" ></ngx-avatar>
+
+                  </div>
+                </div>
+              </div>
+                    <p style=" padding-left: 8px;" class="name">{{item.GroupName}}</p>
+                    <span  style=" position: absolute;
+                    left: 0;
+                    margin: -2px 0 0 -2px;"  [ngClass]="getClass(item.UnreadMess)"  *ngFor="let lastmess of item.LastMess">
+
+                        <p style="margin-left: 5px;" *ngIf="lastmess.UserName===userCurrent">Bạn:</p>
+                        <p style="margin-left: 5px;" *ngIf="lastmess.UserName!=userCurrent&&lastmess.InfoUser.length>0">{{lastmess.InfoUser[0].Fullname}}:</p>
+                        <p  class="contentlassmes" *ngIf="lastmess.isFile">Đính kèm 1 file</p>
+
+
+                        <p class="textlast"  *ngIf="lastmess.Content_mess&&lastmess.Content_mess.length>30&&!lastmess.isFile&&!lastmess.isHiden"  [innerHTML]="lastmess.Content_mess">
+
+
+                        </p>
+
+
+                       <!-- <label *ngIf="lastmess.Content_mess.length>30">...</label>  -->
+
+                       <p  *ngIf="lastmess.Content_mess&&lastmess.isHiden&&!lastmess.isFile" > Tin nhắn đã thu hồi</p>
+                        <p  *ngIf="lastmess.Content_mess&&lastmess.Content_mess.length<=30&&!lastmess.isFile&&!lastmess.isHiden" [innerHTML]="lastmess.Content_mess"> </p>
+
+                    </span>
+                  <!-- </div> -->
+
+                </div>
+
+                <div  style="    align-items: flex-end;
+               display: flex;
+               flex-direction: column;">
+
+
+
+
+                <div *ngIf="item.LastMess.length>0" >
+                  <p style="    text-align: center;
+                  width: 43px;
+                  font-size: 12px;
+                  margin-bottom: 0;
+                  float: right;">{{item.LastMess[0].CreatedDate | date : 'yyyy/M/dd h:mm'| timelast}}</p>
+                </div>
+                <ngx-avatar *ngIf="item.UnreadMess>0" class="my-avatar"   [size]="22" value="{{item.UnreadMess}}" bgColor="#f52f2f" ></ngx-avatar>
+              </div>
+                <!-- <span  class="badge label-u label-danger cover " *ngIf="item.UnreadMess > 0">{{item.UnreadMess}}</span> -->
+
+              </li>
+
+            </ul>
+
+               <div class="more">
+                <div class="more-string">
+                  <div
+                  >
+
+                    <ng-container>
+
+                      <button style="float: right;" mat-icon-button [matMenuTriggerFor]="menu"
+                      aria-label="Example icon-button with a menu">
+                      <mat-icon  class="action" style="font-size: 22px;">more_horiz</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+
+                      <button  mat-menu-item (click)="creaFormDelete(item.IdGroup,item.isGroup)"
+                        matTooltip="Xóa hội thoại">
+                        <mat-icon >delete</mat-icon>
+                        <span>Xóa cuộc hội thoại</span>
+                      </button>
+
+
+
+
+                    </mat-menu>
+
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+
+          </div>
+
+        </div>
+        <!-- <router-outlet></router-outlet> -->
+      </div>
+    </ng-template>
+	</mat-tab>
+
+  <!-- end tab chat -->
+
+  <!-- begin tab notifi -->
+
+
+	<mat-tab >
+    
+     
+		<ng-template mat-tab-label id="notify">
+      <div  class="pulse">
+
+
+			<mat-icon  matBadge="{{numberInfo}}" matBadgeColor="warn" style="color: white;margin-top: 10px;">notifications_active</mat-icon>
+      <span class="pulse-ring"></span>
+    </div>
+		</ng-template>
+ 
+	  <div id="frame" style="border: 1px solid #E1E4EA;">
+      <div id="sidepanel">
+
+
+        <div>
+
+       <app-notification (loadUnreadList)="updateNumberNoti($event)"></app-notification>
+
+
+        </div>
+
+      </div>
+      <!-- <router-outlet></router-outlet> -->
+      <!-- <app-slider-message ></app-slider-message> -->
+    </div>
+	</mat-tab>
+
+  <!-- end tab notifi -->
+	<mat-tab >
+		<ng-template  mat-tab-label>
+			<mat-icon style="color: white;">list_alt</mat-icon>
+		</ng-template>
+    <div id="frame" style="border: 1px solid #E1E4EA;">
+      <div id="sidepanel">
+        <div id="profile">
+          <div class="wrap">
+            <div style=" padding: 25px 15px 10px 15px;" >
+
+                <span class="titile">Ứng dụng</span>
+
+            </div>
+            <hr>
+          </div>
+          <perfect-scrollbar style="height: 85vh;position: relative;" [perfectScrollbar]="{wheelPropagation: false}">
+          <div style="    display: flex;
+          flex-wrap: wrap;">
+
+
+          <div class="item" *ngFor="let app of listApp">
+
+        <ng-container *ngIf="app.IsShowApp">
+            <div class="d-block py-5 px-5 text-center" style="height: 80px;">
+                <div *ngIf="app.Icon == '' || app.Icon == null">
+                    <a class="d-block rectangle" href="{{app.BackendURL}}" target="_blank"></a>
+                </div>
+                <div *ngIf="app.Icon != '' && app.Icon != null">
+                    <a href="{{app.BackendURL}}" target="_blank">
+                        <img src="{{app.Icon}}" height="51" width="51">
+                    </a>
+                </div>
+            </div>
+
+            <div class=" text">{{app.AppName}}</div>
+          </ng-container>
+        </div>
+
+      </div>
+    </perfect-scrollbar>
+        </div>
+
+        <div>
+
+       <!-- <app-notification></app-notification> -->
+
+
+        </div>
+
+      </div>
+      <!-- <app-slider-message></app-slider-message> -->
+      <!-- <router-outlet></router-outlet> -->
+    </div>
+	</mat-tab>
+
+</mat-tab-group>
+<div id="frame">
+  <div id="sidepanel">
+    <!-- <div id="profile">
+      <div class="wrap">
+
+    </div>
+
+
+
+  </div> -->
+  <router-outlet></router-outlet>
+</div>
+</div>
+</div>

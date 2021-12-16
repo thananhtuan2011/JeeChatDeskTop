@@ -1,0 +1,246 @@
+<style>
+     :host>>>.card {
+        border-radius: 0 !important;
+    }
+
+     :host>>>.row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+    }
+</style>
+<div class="card card-custom">
+    <div class="card-header">
+        <div class="card-title" style="display: flex;align-items: center;">
+            <h3 class="card-label" style="width: 100%;">Tạo cuộc họp</h3>
+            <div class="card-toolbar" style="width: 100%;">
+              <div style="float: right;">
+
+
+              <button (click)="goBack()" class="ja_btn-goback" mat-raised-button matTooltip="Trở lại" type="button">
+             <span>Trở lại</span>
+         </button>&nbsp;&nbsp;
+              <button (click)="TaoCuocHop()" type="button" mat-raised-button class="ja_btn-addnew" matTooltip="Tạo cuộc họp" [disabled]="disabledBtn">
+                 <mat-icon>check</mat-icon>&nbsp;<span>Tạo cuộc họp</span>
+         </button>
+        </div>
+          </div>
+        </div>
+
+    </div>
+    <div class="card-body overflow-auto" [ngStyle]="{'height': getHeight()}">
+        <div>
+            <form [formGroup]="formControls">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <mat-form-field class="example-full-width">
+                            <input class="input-batbuoc mat-focused" formControlName="TenCuocHop" placeholder="Tên cuộc họp" matInput required>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <mat-form-field class="example-full-width">
+                            <input [ngModel]="NgayBatDau" matInput class="input-batbuoc" required [matDatepicker]="picker" formControlName="thoigiandate" placeholder="Thời gian diễn ra">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-2">
+                        <mat-form-field class="example-full-width">
+                            <mat-select  [ngModel]="GioBatDau" required formControlName="thoigiantime">
+                                <mat-option>
+                                    <!-- <ngx-mat-select-search [formControl]="bankTuGio" [placeholderLabel]="''" [noEntriesFoundLabel]="''">
+                                    </ngx-mat-select-search> -->
+                                </mat-option>
+                                <mat-option value="{{itemCate.Gio}}" *ngFor="let itemCate of filteredBanksTuGio | async">
+                                    {{ itemCate.Gio }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-3">
+                        <mat-form-field class="example-full-width">
+                            <input class="input-batbuoc" (keypress)="prenventInputNonNumber($event)" formControlName="thoigianminute" placeholder="Thời lượng (Phút)" matInput required>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <mat-form-field class="d-block" class="example-full-width">
+                            <input class="input-thuong" formControlName="SuDungPhongHopInput" placeholder="Sử dụng phòng họp" matInput>
+                        </mat-form-field>
+                        <!-- <mat-form-field *ngIf="!HideDropDow" class="example-full-width">
+                           <mat-select (selectionChange)="ValueChange($event.value)" required placeholder="Sử dụng phòng họp" formControlName="SuDungPhongHop">
+                               <mat-option>
+                                   <ngx-mat-select-search [formControl]="phonghopname" [placeholderLabel]="''" [noEntriesFoundLabel]="''">
+                                   </ngx-mat-select-search>
+                               </mat-option>
+                               <mat-option value="{{item.id}}" *ngFor="let item of filteredPhongHop | async">
+                                   {{item.Ten}}
+                               </mat-option>
+                           </mat-select>
+                       </mat-form-field> -->
+                    </div>
+                    <div class="col-lg-1">
+                        <div style="padding-top: 5px;">
+                            <button (click)="dangKyPhongHop()" class="d-block" type="button" mat-raised-button class="ja_btn-addnew" matTooltip="Đăng ký phòng họp" [disabled]="disabledBtn">
+                           Đăng ký
+                       </button>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="ShowDangKyTaiSanKhac2">
+                    <div class="row" *ngFor="let dt of listValues,let i = index">
+
+                        <div class="col-lg-3">
+                            <!-- <button (click)="dangKyTaiSan()" style="border:1px solid black; border-radius: 10px;line-height: initial;height: 27px;" type="button" mat-button matTooltip="Đăng ký tài sản khác">
+                           <i class="fas fa-check icon_PheDuyet"></i>
+                           &nbsp;<span>Đăng ký tài sản khác</span>
+                       </button> -->
+                            <mat-form-field class="d-block" class="example-full-width">
+                                <input class="input-thuong" value="{{dt.chitiet}}" placeholder="Tài sản khác" matInput>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-1">
+                            <div style="padding-top: 5px;">
+                                <button mat-icon-button color="warn" type="button" (click)="remove(dt)" matTooltip="Xóa">
+                                   <mat-icon>clear</mat-icon>
+                               </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div *ngIf="ShowDangKyTaiSanKhac" class="row">
+                    <div class="col-lg-12">
+                        <button (click)="dangKyTaiSan()" class="d-block" type="button" mat-raised-button class="ja_btn-addnew" matTooltip="Đăng ký tài sản khác">
+                           Đăng ký tài sản khác
+                       </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div style="padding-top: 15px;padding-bottom: 15px;">
+                            <mat-radio-group (change)="PhongHopTrucTuyen($event)" aria-label="Select an option">
+                                <mat-radio-button #button1 [checked]="checkedZoom" value="1" (click)="checkState(button1)">Sử dụng phòng họp trực tuyến Zoom
+                                    <span style="margin-left: 3px;">
+                                        <img style="width: 25px;" src="./assets/media/svg/social-icons/zoom.svg">
+                                    </span>
+                                </mat-radio-button>
+                                <mat-radio-button #button2 [checked]="checkedGoogle" value="2" (click)="checkState(button2)">Sử dụng phòng họp trực tuyến Google Meet
+                                    <span style="margin-left: 5px;" >
+                                      <img style="width: 25px;" src="./assets/media/svg/social-icons/google-meet.svg">
+                                    </span>
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div *ngIf="selectedZoom" class="col-md-3 kt-margin-bottom-10-mobile">
+                        <mat-form-field class="example-full-width">
+                            <mat-select placeholder="Chọn phòng họp Zoom" formControlName="IDPhongHop">
+                                <mat-option *ngFor="let tmp of listKey" value="{{tmp.Id}}">
+                                    {{tmp.TenPhong}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row" style="flex-grow: 1;padding-top: 10px;">
+                            <div style="padding-top: 5px; margin-right: 15px;display: flex;flex-wrap:wrap;max-width: 700px;">Mời tham dự:
+
+
+                            <div style="padding-right: 55px;width: 35px;" class="cu-user-group url scale-hover-01 position-relative" *ngFor="let user of listNguoiThamGia || [];let index = index">
+                              <div *ngFor="let member of user.InfoMemberUser || [];let vi = index">
+
+
+                                <!-- <i class="far fa-times-circle url view-hover text-dark bg-white" style="position: absolute;top:0;right:0;border-radius: 50%;"></i> -->
+                                <i class="far fa-times-circle url view-hover text-dark bg-white" style="position: absolute;top:0;right:0;border-radius: 50%;" (click)="deleteUserThamGia(user)"></i>
+                                <kt-avatar-user [image]="member.Image" size="29" [name]="member.HoTen">
+                                </kt-avatar-user>
+                              </div>
+                            </div>
+                            <div (click)="AddThanhVien(1)"  matTooltip="Chọn người" matTooltipPosition="above" class="url user" style="border: 1px dashed #676363;border-radius: 50%;padding:0 5px 5px 5px;display: inline-block;width: 29px;height: 29px;cursor: pointer;margin-left: 10px; ">
+                                <i class="fas fa-user-plus pd-0" style="font-size: 13px; "></i>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- <mat-menu #memberThamGia="matMenu">
+                            <div class="page-work-detail">
+                                <kt-choose-users isNewView="true" [options]="options" (IsSearch)="stopPropagation($event)" (ItemSelected)="ItemSelectedThamGia($event)">
+                                </kt-choose-users>
+                            </div>
+                        </mat-menu> -->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row" style="flex-grow: 1;padding-top: 10px;">
+                            <div style="padding-top: 5px;margin-right: 15px; display:flex;flex-wrap: wrap;">Người theo dõi:
+                            <div style="padding-right: 5px;" class="cu-user-group url scale-hover-01 position-relative" *ngFor="let usertd of listNguoiTheoDoi || [];let index = index">
+                                <i class="far fa-times-circle url view-hover text-dark bg-white" style="position: absolute;top:0;right:0;border-radius: 50%;"></i>
+                                <i class="far fa-times-circle url view-hover text-dark bg-white" style="position: absolute;top:0;right:0;border-radius: 50%;" (click)="deleteUserTheoDoi(usertd)"></i>
+                                <kt-avatar-user [image]="usertd.Image" size="29" [name]="usertd.HoTen">
+                                </kt-avatar-user>
+                            </div>
+                            <div (click)="AddThanhVien(2)" matTooltip="Chọn người" matTooltipPosition="above" class="url user" style="border: 1px dashed #676363;border-radius: 50%;padding:0 5px 5px 5px;display: inline-block;width: 29px;height: 29px; ">
+                                <i class="fas fa-user-plus pd-0" style="font-size: 13px; "></i>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- <mat-menu #memberTheoDoi="matMenu">
+                            <div class="page-work-detail">
+                                <kt-choose-users isNewView="true" [options]="options1" (IsSearch)="stopPropagation($event)" (ItemSelected)="ItemSelectedTheoDoi($event)">
+                                </kt-choose-users>
+                            </div>
+                        </mat-menu> -->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <mat-checkbox formControlName="XacNhanThamGia">Yêu cầu xác nhận tham dự</mat-checkbox>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <mat-checkbox (change)="showOptions($event)" formControlName="NhapTomTat">Bắt buộc nhập tóm tắt, kết luận cuộc họp</mat-checkbox>
+                    </div>
+                    <div class="col-lg-6" *ngIf="clickNhapTomTat">
+                        <div class="row" style="flex-grow: 1;padding-top: 10px;">
+                            <div style="padding: 5px; margin-right: 15px; display: flex;flex-wrap: wrap;">Người nhập tóm tắt:
+                            <div style="padding-right: 5px;" class="cu-user-group url scale-hover-01 position-relative" *ngFor="let userTT of listNguoiTomTat || [];let index = index">
+                                <i class="far fa-times-circle url view-hover text-dark bg-white" style="position: absolute;top:0;right:0;border-radius: 50%;"></i>
+                                <i class="far fa-times-circle url view-hover text-dark bg-white" style="position: absolute;top:0;right:0;border-radius: 50%;" (click)="deleteUserTomTat(userTT)"></i>
+                                <kt-avatar-user [image]="userTT.Image" size="29" [name]="userTT.HoTen">
+                                </kt-avatar-user>
+                            </div>
+                            <div (click)="AddThanhVien(3)" matTooltip="Chọn người" matTooltipPosition="above" class="url user" style="border: 1px dashed #676363;border-radius: 50%;padding: 0 5px 5px 5px;display: inline-block;width: 29px;height: 29px; ">
+                                <i class="fas fa-user-plus pd-0" style="font-size: 13px; "></i>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- <mat-menu #member="matMenu">
+                            <div class="page-work-detail">
+                                <kt-choose-users isNewView="true" [options]="options2" (IsSearch)="stopPropagation($event)" (ItemSelected)="ItemSelectedTomTat($event)">
+                                </kt-choose-users>
+                            </div>
+                        </mat-menu> -->
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <mat-form-field class="example-full-width">
+                            <textarea rows="1" class="input-thuong" formControlName="GhiChu" placeholder="Ghi chú" matInput></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

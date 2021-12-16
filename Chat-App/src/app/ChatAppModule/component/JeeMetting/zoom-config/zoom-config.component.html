@@ -1,0 +1,59 @@
+<style>
+     :host>>>.card-body {
+        padding: 15px !important;
+    }
+</style>
+<div class="card card-custom">
+    <div class="card-header">
+        <div class="card-title" style="cursor: all-scroll;" mat-dialog-draggable-title>
+            <h3 class="card-label card-label-dialog">Cài đặt thông tin cấu hình Zoom
+            </h3>
+        </div>
+        <div class="card-toolbar">
+            <button (click)="huongdan()" type="button" mat-raised-button class="ja_btn-addnew" matTooltip="Hướng dẫn">
+               Hướng dẫn lấy thông tin cấu hình
+        </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="itemForm" class="m-form m-form--group-seperator-dashed">
+            <div class="row align-items-center">
+                <div class="col-md-12 m--margin-bottom-10-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                        <input matInput placeholder="API Key" required class="require" formControlName="APIKey" required #focusInput>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-12 m--margin-bottom-10-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                        <input matInput placeholder="API Secret" required class="require" formControlName="APISecret" required>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-12 m--margin-bottom-10-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                        <input matInput placeholder="SDK Key" required class="require" formControlName="SDKKey" required>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-12 m--margin-bottom-10-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                        <input matInput placeholder="SDK Secret" required class="require" formControlName="SDKSecret" required>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-12 m--margin-bottom-10-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                        <input matInput placeholder="CLIENT ID" class="require" formControlName="ClientID">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-12 m--margin-bottom-10-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                        <input matInput placeholder="CLIENT SECRET" class="require" formControlName="ClientSecret">
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="dialog-footer">
+        <button type="button" mat-raised-button (click)="goBack()" class="ja_button ja_btn-goback">
+{{'GeneralKey.quaylai' | translate}}
+</button>&nbsp;&nbsp;
+        <button type="button" (click)="onSumbit()" [disabled]="disablebtn" mat-raised-button class="ja_button ja_btn-addnew">Lưu đóng</button>
+    </div>
