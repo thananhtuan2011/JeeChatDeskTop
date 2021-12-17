@@ -71,9 +71,8 @@ async function createWindow () {
   top.win.loadURL(startUrl);
    top.win.set
  new Badge(top.win);
- top.win.once ('ready-to-show', () => { 
-  autoUpdater.checkForUpdatesAndNotify (); 
-});
+
+   autoUpdater.checkForUpdatesAndNotify (); 
 }
 
 // This method will be called when Electron has finished
@@ -119,6 +118,8 @@ top.icons.loadURL("https://cdn.jee.vn/jee-chat/File/JeeChat102466329.png");
 top.icons.webContents.on("paint", (event, dirty, image) => {
     if (top.tray) top.tray.setImage(image.resize({width: 16, height: 16}));
 });
+
+
 });
 
 app.on("before-quit", ev => {

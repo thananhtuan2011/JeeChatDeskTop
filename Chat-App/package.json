@@ -1,6 +1,6 @@
 {
   "name": "JeeChat",
-  "version": "9.0.0",
+  "version": "9.0.1",
   "main": "main.js",
   "repository": "https://github.com/thananhtuan2011/JeeChatDeskTop",
   "scripts": {
@@ -106,6 +106,8 @@
         "provider": "github",
         "owner": "thananhtuan2011",
         "repo": "JeeChatDeskTop",
+        "private": false,
+         "releaseType": "release",
         "token": "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"
       }
     ],
