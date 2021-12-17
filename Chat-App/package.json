@@ -1,6 +1,6 @@
 {
   "name": "JeeChat",
-  "version": "6.0.0",
+  "version": "8.0.0",
   "main": "main.js",
   "repository": "https://github.com/thananhtuan2011/JeeChatDeskTop",
   "scripts": {
@@ -106,7 +106,7 @@
         "provider": "github",
         "owner": "thananhtuan2011",
         "repo": "JeeChatDeskTop",
-        "token": "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"
+        "token": "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"
       }
     ],
     "directories": {

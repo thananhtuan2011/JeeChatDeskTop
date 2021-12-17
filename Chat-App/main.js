@@ -71,6 +71,9 @@ async function createWindow () {
   top.win.loadURL(startUrl);
    top.win.set
  new Badge(top.win);
+ top.win.once ('ready-to-show', () => { 
+  autoUpdater.checkForUpdatesAndNotify (); 
+});
 }
 
 // This method will be called when Electron has finished
@@ -225,5 +228,8 @@ autoUpdater.on ('update-available', () => {
 autoUpdater.on ('update-download', () => { 
   console.log("Sự kiên download")
   mainWindow.webContents.send ('update_downloaded'); 
+});
+ipcMain.on ('restart_app', () => { 
+  autoUpdater.quitAndInstall (); 
 });
 // Define any IPC or other custom functionality below here
