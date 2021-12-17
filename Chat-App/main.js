@@ -223,10 +223,13 @@ ipcMain.on("setProgressBarWindows", (event, data) => {
 });
 autoUpdater.on ('update-available', () => { 
   console.log("Sự kiên update")
+  top.win.webContents.openDevTools();
   mainWindow.webContents.send ('update_available'); 
 });
 autoUpdater.on ('update-download', () => { 
   console.log("Sự kiên download")
+   
+ top.win.webContents.openDevTools();
   mainWindow.webContents.send ('update_downloaded'); 
 });
 ipcMain.on ('restart_app', () => { 
