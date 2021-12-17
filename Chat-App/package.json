@@ -1,11 +1,8 @@
 {
   "name": "JeeChat",
-  "version": "1.0.0",
+  "version": "6.0.0",
   "main": "main.js",
   "repository": "https://github.com/thananhtuan2011/JeeChatDeskTop",
-   
-   
-
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -44,7 +41,7 @@
     "@types/gapi.auth2": "^0.0.55",
     "angular-gallery": "^1.0.2",
     "bootstrap": "^5.0.1",
- 
+   
     "electron-store": "^8.0.1",
     "electron-updater": "^4.6.1",
     "electron-windows-badge": "^1.1.0",
@@ -109,7 +106,7 @@
         "provider": "github",
         "owner": "thananhtuan2011",
         "repo": "JeeChatDeskTop",
-        "token":"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"
+        "token": "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"
       }
     ],
     "directories": {
