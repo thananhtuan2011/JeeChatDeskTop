@@ -8,7 +8,7 @@ const { session } = require("electron");
 const path = require('path');
 const Badge = require('electron-windows-badge');
 const url = require('url');
-
+// const { autoUpdater } = require('electron-updater');
 // Place holders for our windows so they don't get garbage collected.
 let mainWindow = null;
 active:Boolean=false
@@ -212,6 +212,13 @@ ipcMain.on("setProgressBarWindows", (event, data) => {
   top.win.setProgressBar(1);
  });
 
-
-
+ ipcMain.on('app_version', (event) => {
+  event.sender.send('app_version', { version: app.getVersion() });
+});
+// autoUpdater.on ('update-available', () => { 
+//   mainWindow.webContents.send ('update_available'); 
+// });
+// autoUpdater.on ('update-download', () => { 
+//   mainWindow.webContents.send ('update_downloaded'); 
+// });
 // Define any IPC or other custom functionality below here
