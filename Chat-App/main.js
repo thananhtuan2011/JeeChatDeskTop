@@ -83,8 +83,9 @@ app.on('ready', () => {
   app.setAppUserModelId("Thông Báo");
  // app.setAppUserModelId(process.execPath);
  createWindow();
+ 
  top.win.on("close", ev => {
-  //console.log(ev);
+
   ev.sender.hide();
   ev.preventDefault(); // prevent quit process
 });
@@ -98,14 +99,17 @@ const menu = Menu.buildFromTemplate([
           
         }},
     ]},
-    
+   
     {type: "separator"},
-    {role: "quit"}, // "role": system prepared action menu
+     {role: "quit"}, // "role": system prepared action menu
 ]);
 
 top.tray.setToolTip("JeeChat");
 //top.tray.setTitle("Tray Example"); // macOS only
-top.tray.setContextMenu(menu);
+
+  top.tray.setContextMenu(menu);
+
+
 
 top.tray.on('click', () => {
  top.win.show();
@@ -125,9 +129,12 @@ top.icons.webContents.on("paint", (event, dirty, image) => {
 app.on("before-quit", ev => {
   // BrowserWindow "close" event spawn after quit operation,
   // it requires to clean up listeners for "close" event
-  top.win.removeAllListeners("close");
+  console.log(" top.win", top.win)
+  
+     top.win.removeAllListeners("close");
+  
   // release windows
-  top = null;
+  // top = null;
 });
 // Quit when all windows are closed.
 // app.on('window-all-closed', function () {

@@ -23,7 +23,7 @@
 </head>
 <body>
   <script async defer src="https://apis.google.com/js/api.js"></script>
-  <p id="version"></p>
+  <!-- <p id="version"></p>
   <div id="notification" class="hidden">
     <p id="message"></p>
     <button id="close-button" onClick="closeNotification()">
@@ -32,8 +32,8 @@
     <button id="restart-button" onClick="restartApp()" class="hidden">
       Restart
     </button>
-  </div>
-  <script>
+  </div> -->
+  <!-- <script>
     const { ipcRenderer } = require('electron');
     const version = document.getElementById('version');
     function closeNotification() {
@@ -61,7 +61,7 @@ ipcRenderer.on('update_downloaded', () => {
   restartButton.classList.remove('hidden');
   notification.classList.remove('hidden');
 });
-  </script>
+  </script> -->
   <app-root></app-root>
 </body>
 </html>
